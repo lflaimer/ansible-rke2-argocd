@@ -8,7 +8,7 @@ argocd_use_helmconfig: true
 
 argocd_private_repo_url: ""
 argocd_repo_known_hosts: ""
-argocd_repo_private_key: ""
+argocd_repo_private_key_b64: ""
 argocd_repo_private_key_path: "" 
 
 argocd_project_name: "platform"
