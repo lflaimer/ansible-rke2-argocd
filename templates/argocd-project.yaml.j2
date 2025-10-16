@@ -5,11 +5,15 @@ metadata:
   namespace: {{ argocd_install_namespace }}
 spec:
   sourceRepos:
-{% if argocd_private_repo_url %}  - "{{ argocd_private_repo_url }}"{% endif %}
-{% if argocd_public_repo_url %}   - "{{ argocd_public_repo_url }}"{% endif %}
+{% if argocd_private_repo_url %}
+  - "{{ argocd_private_repo_url }}"
+{% endif %}
+{% if argocd_public_repo_url %}
+  - "{{ argocd_public_repo_url }}"
+{% endif %}
   destinations:
-    - server: https://kubernetes.default.svc
-      namespace: "*"
+  - server: https://kubernetes.default.svc
+    namespace: "*"
   clusterResourceWhitelist:
-    - group: "*"
-      kind: "*"
+  - group: "*"
+    kind: "*"
