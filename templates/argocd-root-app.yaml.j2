@@ -1,0 +1,29 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: {{ argocd_root_app_name }}
+  namespace: {{ argocd_install_namespace }}
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: {{ argocd_project_name }}
+  sources:
+    - repoURL: "{{ argocd_private_repo_url }}"
+      targetRevision: "{{ argocd_private_revision }}"
+      path: "{{ argocd_private_root_path }}"
+{% if argocd_public_repo_url %}
+    - repoURL: "{{ argocd_public_repo_url }}"
+      targetRevision: "{{ argocd_public_revision }}"
+      path: "{{ argocd_public_root_path }}"
+{% endif %}
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: {{ argocd_install_namespace }}
+  syncPolicy:
+    automated:
+      prune: {{ argocd_sync_prune | bool | lower }}
+      selfHeal: {{ argocd_sync_selfheal | bool | lower }}
+    syncOptions:
+{% if argocd_sync_create_ns %}    - CreateNamespace=true
+{% endif %}{% if argocd_sync_apply_out_of_sync_only %}    - ApplyOutOfSyncOnly=true
+{% endif %}

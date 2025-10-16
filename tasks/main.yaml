@@ -1,0 +1,89 @@
+---
+- name: Ensure RKE2 manifests dir exists
+  ansible.builtin.file:
+    path: "{{ rke2_manifests_dir }}"
+    state: directory
+    mode: "0755"
+  tags: [argocd]
+
+- name: Drop argocd namespace manifest
+  ansible.builtin.template:
+    src: argocd-namespace.yaml.j2
+    dest: "{{ rke2_manifests_dir }}/argocd-namespace.yaml"
+    mode: "0644"
+  tags: [argocd]
+
+- name: Drop Argo CD HelmChart manifest
+  ansible.builtin.template:
+    src: argocd-helmchart.yaml.j2
+    dest: "{{ rke2_manifests_dir }}/argocd-helmchart.yaml"
+    mode: "0644"
+  tags: [argocd]
+
+- name: Drop Argo CD HelmChartConfig overrides
+  ansible.builtin.template:
+    src: argocd-helmconfig.yaml.j2
+    dest: "{{ rke2_manifests_dir }}/argocd-helmconfig.yaml"
+    mode: "0644"
+  when: argocd_use_helmconfig | bool
+  tags: [argocd]
+
+- name: Seed repo credential
+  ansible.builtin.template:
+    src: argocd-repo-secret-ssh.yaml.j2
+    dest: "{{ rke2_manifests_dir }}/argocd-repo-secret-ssh.yaml"
+    mode: "0640"
+  when:
+    - argocd_private_repo_url | length > 0
+    - (argocd_repo_private_key | length > 0) or (argocd_repo_private_key_path | length > 0)
+  tags: [argocd, secrets]
+
+- name: Find head host
+  ansible.builtin.set_fact:
+    head_host: >-
+      {{ (groups['all'] | map('extract', hostvars)
+          | selectattr('rke2_node_type','equalto','head')
+          | map(attribute='inventory_hostname') | list | first) }}
+  run_once: true
+
+- name: Wait for Argo CD Application CRD
+  kubernetes.core.k8s_info:
+    kubeconfig: /etc/rancher/rke2/rke2.yaml
+    api_version: apiextensions.k8s.io/v1
+    kind: CustomResourceDefinition
+    name: applications.argoproj.io
+  register: app_crd
+  retries: 60
+  delay: 5
+  until: app_crd.resources | length > 0
+  delegate_to: "{{ head_host }}"
+  become: true
+  run_once: true
+
+- name: Wait for argocd-server rollout (best-effort)
+  ansible.builtin.command: >
+    kubectl --kubeconfig=/etc/rancher/rke2/rke2.yaml
+    -n {{ argocd_install_namespace }} rollout status deploy/argocd-server --timeout=300s
+  changed_when: false
+  failed_when: false
+  delegate_to: "{{ head_host }}"
+  become: true
+  run_once: true
+
+- name: Apply Argo CD Project
+  kubernetes.core.k8s:
+    kubeconfig: /etc/rancher/rke2/rke2.yaml
+    state: present
+    template: "argocd-project.yaml.j2"
+  delegate_to: "{{ head_host }}"
+  become: true
+  run_once: true
+
+- name: Seed root Application (multiple sources)
+  kubernetes.core.k8s:
+    kubeconfig: /etc/rancher/rke2/rke2.yaml
+    state: present
+    template: "argocd-root-app.yaml.j2"
+  delegate_to: "{{ head_host }}"
+  become: true
+  run_once: true
