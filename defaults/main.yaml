@@ -17,10 +17,6 @@ argocd_root_app_name: "platform-root"
 argocd_private_revision: "main"
 argocd_private_root_path: "clusters/prod"
 
-argocd_public_repo_url: ""
-argocd_public_revision: "v1.0.0"
-argocd_public_root_path: "apps/nginx"
-
 argocd_sync_prune: true
 argocd_sync_selfheal: true
 argocd_sync_create_ns: true

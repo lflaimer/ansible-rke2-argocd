@@ -11,11 +11,6 @@ spec:
     - repoURL: "{{ argocd_private_repo_url }}"
       targetRevision: "{{ argocd_private_revision }}"
       path: "{{ argocd_private_root_path }}"
-{% if argocd_public_repo_url %}
-    - repoURL: "{{ argocd_public_repo_url }}"
-      targetRevision: "{{ argocd_public_revision }}"
-      path: "{{ argocd_public_root_path }}"
-{% endif %}
   destination:
     server: https://kubernetes.default.svc
     namespace: {{ argocd_install_namespace }}
