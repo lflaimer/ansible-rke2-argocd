@@ -88,3 +88,12 @@
   delegate_to: "{{ head_host }}"
   become: true
   run_once: true
+
+- name: Apply Argo CD Root App
+  kubernetes.core.k8s:
+    kubeconfig: /etc/rancher/rke2/rke2.yaml
+    state: present
+    template: argocd-root-app.yaml
+  delegate_to: "{{ head_host }}"
+  become: true
+  run_once: true
