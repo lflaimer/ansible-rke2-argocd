@@ -3,7 +3,7 @@ argocd_head_kubeconfig: "/etc/rancher/rke2/rke2.yaml"
 
 argocd_install_namespace: "argocd"
 argocd_chart_version: "7.3.6"
-argocd_domain: "argocd.local"
+argocd_domain: "argocd.greenhousenodes.com"
 argocd_use_helmconfig: true
 
 argocd_private_repo_url: ""
@@ -11,8 +11,7 @@ argocd_repo_known_hosts: ""
 argocd_repo_private_key_b64: ""
 argocd_repo_private_key_path: "" 
 
-argocd_project_name: "bootstrap"
-argocd_root_app_name: "bootstrap-root"
+argocd_project_name: "argocd"
 
 argocd_private_revision: "main"
 argocd_private_root_path: "clusters/bootstrap"
