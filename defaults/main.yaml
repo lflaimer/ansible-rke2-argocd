@@ -11,7 +11,7 @@ argocd_repo_known_hosts: ""
 argocd_repo_private_key_b64: ""
 argocd_repo_private_key_path: "" 
 
-argocd_project_name: "platform"
+argocd_project_name: "bootstrap"
 argocd_root_app_name: "platform-root"
 
 argocd_private_revision: "main"
