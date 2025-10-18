@@ -79,3 +79,12 @@
   delegate_to: "{{ head_host }}"
   become: true
   run_once: true
+
+- name: Apply Argo CD Ingress
+  kubernetes.core.k8s:
+    kubeconfig: /etc/rancher/rke2/rke2.yaml
+    state: present
+    template: argocd-ingress.yaml.j2
+  delegate_to: "{{ head_host }}"
+  become: true
+  run_once: true
