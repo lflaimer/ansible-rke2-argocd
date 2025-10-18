@@ -88,3 +88,31 @@
   delegate_to: "{{ head_host }}"
   become: true
   run_once: true
+
+- name: Ensure vault namespace exists
+  kubernetes.core.k8s:
+    kubeconfig: /etc/rancher/rke2/rke2.yaml
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Namespace
+      metadata:
+        name: vault
+  delegate_to: "{{ head_host }}"
+  become: true
+  run_once: true
+
+- name: Create Cloudflare API token secret for vault bootstrap
+  no_log: true
+  kubernetes.core.k8s:
+    kubeconfig: /etc/rancher/rke2/rke2.yaml
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Secret
+      metadata:
+        name: vault-bootstrap-cf-token
+        namespace: vault
+      type: Opaque
+      stringData:
+        api-token: "{{ cloudflare_api_token }}"
