@@ -79,12 +79,3 @@
   delegate_to: "{{ head_host }}"
   become: true
   run_once: true
-
-- name: Seed root Application (multiple sources)
-  kubernetes.core.k8s:
-    kubeconfig: /etc/rancher/rke2/rke2.yaml
-    state: present
-    template: "argocd-root-app.yaml.j2"
-  delegate_to: "{{ head_host }}"
-  become: true
-  run_once: true
