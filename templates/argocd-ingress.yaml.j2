@@ -5,6 +5,7 @@ metadata:
   namespace: {{ argocd_install_namespace }}
   annotations:
     nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
 {% if argocd_ingress_tls_enabled | default(false) %}
     cert-manager.io/cluster-issuer: {{ argocd_cluster_issuer | default("letsencrypt-prod") }}
 {% endif %}

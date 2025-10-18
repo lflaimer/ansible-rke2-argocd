@@ -5,10 +5,11 @@ metadata:
   namespace: kube-system
 spec:
   valuesContent: |-
-    # Example override knobs; keep or remove as needed
     configs:
       params:
         server.insecure: "true"
+      cm:
+        url: https://argocd.greenhousenodes.com
     server:
       extraArgs:
         - --insecure
