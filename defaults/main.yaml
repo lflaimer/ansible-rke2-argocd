@@ -21,5 +21,3 @@ argocd_sync_prune: true
 argocd_sync_selfheal: true
 argocd_sync_create_ns: true
 argocd_sync_apply_out_of_sync_only: true
-
-cloudflare_api_token: ""
