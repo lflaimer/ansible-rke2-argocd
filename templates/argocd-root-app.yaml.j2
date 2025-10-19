@@ -8,11 +8,13 @@ metadata:
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
-  project: {{ argocd_project_name | default("argocd") }}
+  project: argocd
   source:
     repoURL: "{{ argocd_private_repo_url }}"
-    targetRevision: "{{ argocd_private_revision | default("main") }}"
-    path: "{{ argocd_private_root_path | default("argocd") }}"
+    targetRevision: main
+    path: argocd
+    directory:
+        recurse: true
   destination:
     server: https://kubernetes.default.svc
     namespace: {{ argocd_install_namespace }}

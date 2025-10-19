@@ -6,10 +6,9 @@ metadata:
 spec:
   valuesContent: |-
     configs:
-      params:
-        server.insecure: "true"
       cm:
         url: https://argocd.greenhousenodes.com
     server:
+      insecure: true
       extraArgs:
         - --insecure
