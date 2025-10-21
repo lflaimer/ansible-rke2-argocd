@@ -71,6 +71,15 @@
   become: true
   run_once: true
 
+- name: Render & apply Argo CD HTTP ingress
+  kubernetes.core.k8s:
+    state: present
+    template: argocd-ingress.yaml.j2
+    kubeconfig: "{{ argocd_kubeconfig }}"
+  delegate_to: "{{ head_host }}"
+  become: true
+  run_once: true
+
 - name: Apply Argo CD Project
   kubernetes.core.k8s:
     kubeconfig: /etc/rancher/rke2/rke2.yaml

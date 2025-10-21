@@ -3,7 +3,6 @@ argocd_head_kubeconfig: "/etc/rancher/rke2/rke2.yaml"
 
 argocd_install_namespace: "argocd"
 argocd_chart_version: "7.3.6"
-argocd_domain: "argocd.greenhousenodes.com"
 argocd_use_helmconfig: true
 
 argocd_private_repo_url: ""
@@ -20,3 +19,11 @@ argocd_sync_prune: true
 argocd_sync_selfheal: true
 argocd_sync_create_ns: true
 argocd_sync_apply_out_of_sync_only: true
+
+argocd_namespace: argocd
+argocd_ingress_class: nginx
+argocd_domain: "argocd.greenhousenodes.com"
+argocd_cluster_issuer: letsencrypt-dns01
+argocd_tls_secret: argocd-tls
+
+argocd_kubeconfig: /etc/rancher/rke2/rke2.yaml
