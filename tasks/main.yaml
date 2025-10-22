@@ -25,7 +25,6 @@
     src: argocd-helmconfig.yaml.j2
     dest: "{{ rke2_manifests_dir }}/argocd-helmconfig.yaml"
     mode: "0644"
-  when: argocd_use_helmconfig | bool
   tags: [argocd]
 
 - name: Seed repo credential

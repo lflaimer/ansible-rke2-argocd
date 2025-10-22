@@ -3,7 +3,6 @@ argocd_head_kubeconfig: "/etc/rancher/rke2/rke2.yaml"
 
 argocd_install_namespace: "argocd"
 argocd_chart_version: "7.3.6"
-argocd_use_helmconfig: true
 
 argocd_private_repo_url: ""
 argocd_repo_known_hosts: ""
